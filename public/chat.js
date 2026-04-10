@@ -1,15 +1,15 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js';
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, limit, serverTimestamp }
-  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  from 'https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js';
 
-// ⚠️ Firebase 콘솔 > 프로젝트 설정 > 웹 앱 구성에서 복사해서 교체하세요
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyA7kMR1nz1qxp0mRmfXYR8jGVnYLszd6zQ",
+  authDomain: "kr-lotto.firebaseapp.com",
+  projectId: "kr-lotto",
+  storageBucket: "kr-lotto.firebasestorage.app",
+  messagingSenderId: "475441794338",
+  appId: "1:475441794338:web:0a236f0c120e871d7be97b",
+  measurementId: "G-GFEL2078CC"
 };
 
 const app = initializeApp(firebaseConfig);
