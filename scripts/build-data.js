@@ -1,4 +1,3 @@
-const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
 
@@ -26,7 +25,7 @@ async function fetchRound(round, retries = 3) {
       };
     } catch (e) {
       if (attempt === retries - 1) return null;
-      await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
+      await new Promise(r => setTimeout(r, 300 * (attempt + 1)));
     }
   }
   return null;
@@ -37,7 +36,7 @@ async function main() {
   console.log(`총 ${currentRound}회차 데이터 수집 시작...`);
 
   const draws = [];
-  const BATCH = 10;
+  const BATCH = 50;
 
   for (let i = 1; i <= currentRound; i += BATCH) {
     const promises = [];
