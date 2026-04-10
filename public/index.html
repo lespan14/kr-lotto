@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>한국 로또 통계</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🍀 한국 로또 6/45 통계</h1>
+    <p id="subtitle">데이터 불러오는 중...</p>
+  </header>
+
+  <div id="loading" class="loading-screen">
+    <div class="spinner"></div>
+    <p id="loading-msg">동행복권 API에서 역대 당첨번호 수집 중...<br>최초 실행 시 수 분이 소요될 수 있습니다.</p>
+  </div>
+
+  <main id="main" style="display:none">
+
+    <!-- 번호 생성기 -->
+    <section class="card generator">
+      <h2>🎰 행운의 번호 생성</h2>
+      <div class="gen-buttons">
+        <button id="btn-random" onclick="generateNumbers('random')">랜덤 생성</button>
+        <button id="btn-hot" onclick="generateNumbers('hot')">자주 나온 번호 위주</button>
+        <button id="btn-cold" onclick="generateNumbers('cold')">적게 나온 번호 위주</button>
+        <button id="btn-mix" onclick="generateNumbers('mix')">균형 조합</button>
+      </div>
+      <div id="generated-numbers" class="ball-row"></div>
+      <p id="gen-desc" class="gen-desc"></p>
+    </section>
+
+    <!-- 요약 통계 -->
+    <section class="card">
+      <h2>📊 통계 요약</h2>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <span class="stat-num" id="stat-total">-</span>
+          <span class="stat-label">총 회차</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" id="stat-most-num">-</span>
+          <span class="stat-label">최다 출현 번호</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" id="stat-most-cnt">-</span>
+          <span class="stat-label">최다 출현 횟수</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" id="stat-least-num">-</span>
+          <span class="stat-label">최저 출현 번호</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 자주 나온 번호 TOP 10 -->
+    <section class="card">
+      <h2>🔥 자주 나온 번호 TOP 10</h2>
+      <div id="hot-numbers" class="ball-stat-list"></div>
+    </section>
+
+    <!-- 적게 나온 번호 TOP 10 -->
+    <section class="card">
+      <h2>🧊 적게 나온 번호 TOP 10</h2>
+      <div id="cold-numbers" class="ball-stat-list"></div>
+    </section>
+
+    <!-- 전체 번호 빈도 히트맵 -->
+    <section class="card">
+      <h2>📈 전체 번호 출현 빈도</h2>
+      <div id="heatmap" class="heatmap"></div>
+      <div class="heatmap-legend">
+        <span class="legend-cold">적음</span>
+        <div class="legend-bar"></div>
+        <span class="legend-hot">많음</span>
+      </div>
+    </section>
+
+    <!-- 최근 당첨 번호 -->
+    <section class="card">
+      <h2>📋 최근 20회 당첨 번호</h2>
+      <div id="recent-draws" class="recent-table-wrap">
+        <table class="recent-table">
+          <thead>
+            <tr><th>회차</th><th>날짜</th><th>당첨 번호</th><th>보너스</th></tr>
+          </thead>
+          <tbody id="recent-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>데이터 출처: <a href="https://www.dhlottery.co.kr" target="_blank">동행복권 공식 API</a> | 이 사이트는 참고용이며 당첨을 보장하지 않습니다.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

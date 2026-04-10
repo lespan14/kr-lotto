@@ -1,0 +1,14 @@
+{
+  "name": "korean-lotto-stats",
+  "version": "1.0.0",
+  "description": "Korean Lotto Statistics & Random Number Generator",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "node scripts/build-data.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^2.7.0"
+  }
+}
