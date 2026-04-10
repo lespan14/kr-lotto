@@ -1,11 +1,5 @@
 let statsData = null;
 
-function getCurrentRound() {
-  const firstDraw = new Date('2002-12-07');
-  const now = new Date();
-  return Math.floor((now - firstDraw) / (7 * 24 * 60 * 60 * 1000)) + 1;
-}
-
 function ballClass(n) {
   if (n <= 10) return 'b1';
   if (n <= 20) return 'b2';
@@ -34,27 +28,10 @@ function computeStats(draws) {
 }
 
 async function loadData() {
-  const staticRes = await fetch('/lotto-data.json');
-  if (!staticRes.ok) throw new Error('lotto-data.json 로딩 실패');
-  const staticData = await staticRes.json();
-  let draws = [...staticData.draws];
-
-  const currentRound = getCurrentRound();
-  if (staticData.lastRound < currentRound) {
-    try {
-      document.getElementById('loading-msg').textContent = '최신 회차 확인 중...';
-      const res = await fetch(`/.netlify/functions/latest-round?from=${staticData.lastRound + 1}`);
-      if (res.ok) {
-        const latest = await res.json();
-        draws = draws.concat(latest.draws);
-      }
-    } catch (e) {
-      console.warn('최신 회차 로딩 실패:', e);
-    }
-  }
-
-  draws.sort((a, b) => a.round - b.round);
-  return draws;
+  const res = await fetch('/lotto-data.json');
+  if (!res.ok) throw new Error('lotto-data.json 로딩 실패');
+  const data = await res.json();
+  return data.draws;
 }
 
 function renderHotCold(sorted, totalRounds) {
