@@ -54,15 +54,22 @@ function esc(s) {
     .replace(/>/g, '&gt;');
 }
 
+let sending = false;
 async function send() {
+  if (sending) return;
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
   if (!text) return;
+  sending = true;
   const nick = document.getElementById('chat-nick').value.trim() || username;
   localStorage.setItem('lotto-nick', nick);
   username = nick;
   input.value = '';
-  await addDoc(messagesRef, { nick, text, ts: serverTimestamp() });
+  try {
+    await addDoc(messagesRef, { nick, text, ts: serverTimestamp() });
+  } finally {
+    sending = false;
+  }
 }
 
 document.getElementById('chat-send').addEventListener('click', send);
