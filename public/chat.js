@@ -54,14 +54,16 @@ function esc(s) {
     .replace(/>/g, '&gt;');
 }
 
-const BAD_WORDS = [
-  '씨발','시발','씨바','시바','ㅅㅂ','썅','쌍욕','개새끼','개새','새끼','놈','년','창녀','보지','자지','좆','꼴통',
-  'ㅂㅅ','병신','미친','미친놈','미친년','지랄','존나','존내','ㅈㄴ','빡대가리','뒈져','뒤져','죽어','꺼져',
-  'fuck','shit','bitch','asshole','bastard','dick','pussy','cunt','cock','nigger','nigga','faggot'
-];
-const BAD_REGEX = new RegExp(BAD_WORDS.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'gi');
+let BAD_REGEX = null;
+fetch('/badwords.json')
+  .then(r => r.json())
+  .then(words => {
+    const pattern = words.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+    BAD_REGEX = new RegExp(pattern, 'gi');
+  });
 
 function filterText(text) {
+  if (!BAD_REGEX) return text;
   return text.replace(BAD_REGEX, m => '*'.repeat(m.length));
 }
 
