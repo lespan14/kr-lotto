@@ -1,0 +1,41 @@
+name: Update Lotto Data
+
+on:
+  schedule:
+    - cron: '0 22 * * 6'  # 매주 토요일 밤 11시 (KST = UTC+9, 추첨 후)
+  workflow_dispatch:       # 수동 실행도 가능
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download latest lotto data
+        run: |
+          curl -L https://raw.githubusercontent.com/smok95/lotto/master/results/all.json -o /tmp/lotto-raw.json
+
+      - name: Convert and save
+        run: |
+          node -e "
+          const fs = require('fs');
+          const raw = require('/tmp/lotto-raw.json');
+          const draws = (Array.isArray(raw) ? raw : Object.values(raw)).map(d => ({
+            round: d.draw_no,
+            date: d.date.slice(0, 10),
+            numbers: d.numbers,
+            bonus: d.bonus_no
+          })).filter(d => d.numbers && d.numbers.length === 6);
+          draws.sort((a, b) => a.round - b.round);
+          const out = { lastRound: draws.at(-1).round, lastDate: draws.at(-1).date, draws };
+          fs.writeFileSync('public/lotto-data.json', JSON.stringify(out));
+          console.log('완료:', draws.length, '회차, 마지막:', draws.at(-1).round, '회 (', draws.at(-1).date, ')');
+          "
+
+      - name: Commit and push if updated
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/lotto-data.json
+          git diff --staged --quiet || git commit -m "Update lotto data: $(node -e "const d=require('./public/lotto-data.json'); console.log(d.lastRound+'회 ('+d.lastDate+')')")"
+          git push
