@@ -31,7 +31,22 @@ async function loadData() {
   const res = await fetch('/lotto-data.json');
   if (!res.ok) throw new Error('lotto-data.json 로딩 실패');
   const data = await res.json();
-  return data.draws;
+  const draws = data.draws;
+
+  try {
+    const nextRound = (data.lastRound || 0) + 1;
+    const liveRes = await fetch(`/.netlify/functions/latest-round?from=${nextRound}`);
+    if (liveRes.ok) {
+      const liveData = await liveRes.json();
+      if (liveData.draws && liveData.draws.length > 0) {
+        draws.push(...liveData.draws);
+      }
+    }
+  } catch (e) {
+    console.warn('최신 회차 fetch 실패 (정적 데이터 사용):', e.message);
+  }
+
+  return draws;
 }
 
 function renderHotCold(sorted, totalRounds) {
