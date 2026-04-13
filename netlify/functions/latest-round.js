@@ -26,9 +26,11 @@ exports.handler = async (event) => {
   try {
     const currentRound = getCurrentRound();
     const from = parseInt(event.queryStringParameters?.from || currentRound);
+    // Use max(currentRound, from) to handle KST/UTC timezone edge cases
+    const upTo = Math.max(currentRound, from) + 1;
     const draws = [];
 
-    for (let r = from; r <= currentRound; r++) {
+    for (let r = from; r <= upTo; r++) {
       const draw = await fetchRound(r);
       if (draw) draws.push(draw);
     }
